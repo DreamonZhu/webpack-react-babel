@@ -2,7 +2,7 @@ var path = require('path');
 var htmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-	entry: './src/main.js',
+	entry: './src/comments.js',
 	output: {
 		path: path.join(__dirname, './dist'),
 		filename: 'bundle.js'
@@ -14,8 +14,7 @@ module.exports = {
 				loader: 'babel-loader',
 				exclude: /node_modules/,
 				options: {
-					plugins: ['transform-runtime'],
-					presets: ['es2015']
+					presets: ['es2015','react']
 				}
 			},
 			{
@@ -26,7 +25,7 @@ module.exports = {
 	},
 	plugins: [
 		new htmlWebpackPlugin({
-			inject: 'body',
+			inject: true,
 			title: 'Intro to webpack',
             template: 'src/index.html'
 		})

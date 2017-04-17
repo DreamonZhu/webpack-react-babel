@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+		<script src="https://cdn.bootcss.com/react/15.5.4/react.js"></script>
+		<script src="https://cdn.bootcss.com/react/15.5.4/react-dom.js"></script>
+		<script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
+    	<script src="https://npmcdn.com/jquery@3.1.0/dist/jquery.min.js"></script>
+    	<script src="https://npmcdn.com/remarkable@1.6.2/dist/remarkable.min.js"></script>
+    </head>
+    <body>
+    	<div id="content"></div>
+    	<script type="text/babel">
+    		class CommentTitle extends React.Component {
+				constructor(props){
+					super(props);
+				}
+
+				render() {
+					return (
+						<div>
+							{this.props.data.map((list, index) => {
+								return (
+									<div key={index}>
+										<h2>{list.title}</h2>
+										<p>{list.username}</p>
+									</div>
+								);
+							})}
+						</div>
+					)
+				}
+			}
+
+			class CommentInput extends React.Component {
+				constructor(props){
+					super(props);
+					this.state = {title: '', username: ""};
+					this.handleChangeName = this.handleChangeName.bind(this);
+					this.handleChangeTitle = this.handleChangeTitle.bind(this);
+					this.handleAdd = this.handleAdd.bind(this);
+				}
+
+				handleChangeName(e){
+					this.setState({username: e.target.value});
+				}
+
+				handleChangeTitle(e){
+					this.setState({title : e.target.value});
+				}
+
+				handleAdd(e){
+					e.preventDefault();
+					var username = this.state.username.trim();
+				    var title = this.state.title.trim();
+				    if (!title || !username) {
+				      return;
+				    }
+					this.props.onSubmit({username: username, title: title});
+					this.setState({title: '', username: ''});
+				}
+
+				render() {
+					return (
+						<div>
+							<input type="text" placeholder="请输入用户名" value={this.state.username} onChange={this.handleChangeName} /><br />
+							<textarea onChange={this.handleChangeTitle} value={this.state.title}></textarea><br />
+							<input type="button" value="提交按钮" onClick={this.handleAdd}/>
+						</div>
+					)
+				}
+			}
+
+    		class Comments extends React.Component {
+				constructor(props){
+					super(props);
+					var data = this.props.data;
+					this.state ={data: data};
+					this.handleInputSubmit = this.handleInputSubmit.bind(this);
+				}
+
+				handleInputSubmit(comment){
+					this.state.data.push(comment);
+					this.setState({});
+				}
+
+				render() {
+					return (
+						<div>
+							<CommentTitle data={this.state.data} />
+							<CommentInput onSubmit={this.handleInputSubmit}/>
+						</div>
+					)
+				}
+			}
+
+			var data = [{
+				title : 'hello world',username : 'coder'
+			},{
+				title : '你好',username : '程序员'
+			}];
+
+			ReactDOM.render(
+				<Comments data={data} />,
+				document.getElementById('content')
+			)
+    	</script>
+    </body>
+</html>
